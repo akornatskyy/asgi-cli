@@ -14,7 +14,7 @@ async def timeit(
         s = time.perf_counter()
         for _ in it:
             await f()
-        return time.process_time() - s
+        return time.perf_counter() - s
     finally:
         if enabled:
             gc.enable()
