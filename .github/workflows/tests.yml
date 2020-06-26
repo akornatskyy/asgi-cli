@@ -1,0 +1,50 @@
+name: tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    name: "${{ matrix.tox }}"
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: "3.6"
+            tox: py36
+          - python: "3.7"
+            tox: py37
+          - python: "3.8"
+            tox: py38
+    steps:
+      - name: Checkout code
+        uses: "actions/checkout@v2"
+      - name: Set up Python
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "${{ matrix.python }}"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox coveralls
+      - name: Run tests
+        run: tox -e ${{ matrix.tox }}
+      - name: Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: coveralls
+  qa:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout code
+        uses: "actions/checkout@v2"
+      - name: Set up Python
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+      - name: Run lint
+        run: tox -e lint
