@@ -7,15 +7,8 @@ START = {
     ],
 }
 
-BODY1 = {
-    "type": "http.response.body",
-    "body": b"Hello",
-}
-
-BODY2 = {
-    "type": "http.response.body",
-    "body": b", world!",
-}
+BODY1 = {"type": "http.response.body", "body": b"Hello"}
+BODY2 = {"type": "http.response.body", "body": b", world!"}
 
 
 async def app(scope, receive, send) -> None:

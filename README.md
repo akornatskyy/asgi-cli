@@ -42,7 +42,7 @@ optional arguments:
                         application/json'
   -d DATA               request body data, e.g. '{"msg":"hello"}', 'msg=hello'
   -b, --benchmark       issue a number of requests through repeated
-                        iterations, (reports throughtput and average call
+                        iterations (reports throughtput and average call
                         time)
   -n NUMBER             a number of requests to issue (default 100K)
   -v, --verbose         make the operation more talkative
@@ -62,15 +62,8 @@ START = {
     ],
 }
 
-BODY1 = {
-    "type": "http.response.body",
-    "body": b"Hello",
-}
-
-BODY2 = {
-    "type": "http.response.body",
-    "body": b", world!",
-}
+BODY1 = {"type": "http.response.body", "body": b"Hello"}
+BODY2 = {"type": "http.response.body", "body": b", world!"}
 
 
 async def app(scope, receive, send) -> None:
@@ -115,7 +108,7 @@ Hello, world!
 `asgi-cli -b example:app` shows execution stats (runs in 3 iterations, for each iteration displays requests per second and an average call time):
 
 ```text
- #1 => 706.26K, 1.42μs
- #2 => 688.64K, 1.45μs
- #3 => 733.55K, 1.36μs
+ #1 => 477.74K, 2.09μs
+ #2 => 438.12K, 2.28μs
+ #3 => 446.90K, 2.24μs
 ```
