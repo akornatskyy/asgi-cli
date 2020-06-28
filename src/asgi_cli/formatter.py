@@ -4,15 +4,15 @@ from asgi_cli.executor import Response
 
 
 def format_number(n: float) -> str:
-    if n > 1000000:
+    if n >= 1000000:
         n /= 1000000
         return f"{n:,.2f}M"
-    if n > 1000:
+    if n >= 1000:
         n /= 1000
         return f"{n:,.2f}K"
-    elif n > 1:
+    elif n >= 1 or n <= 0:
         return f"{n:,.2f}"
-    elif n > 0.001:
+    elif n >= 0.001:
         n = n * 1000.0
         return f"{n:,.2f}m"
     n = n * 1000000.0

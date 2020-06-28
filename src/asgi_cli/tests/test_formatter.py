@@ -23,5 +23,6 @@ class FormatterTestCase(unittest.TestCase):
             (0.00012345, "123.45μ"),
             (0.00001234, "12.34μ"),
             (0.00000123, "1.23μ"),
+            (-1234.56789, "-1,234.57"),
         ]:
             self.assertEqual(format_number(number), expected)
