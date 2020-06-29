@@ -1,6 +1,8 @@
 import argparse
+import json
 import re
 import typing
+from urllib.parse import parse_qsl
 
 from asgi_cli import __version__
 from asgi_cli.typing import Options
@@ -53,7 +55,7 @@ def parse_options(args: typing.List[str]) -> Options:
     parser.add_argument(
         "-b",
         "--benchmark",
-        help="issue a number of requests through repeated iterations, "
+        help="issue a number of requests through repeated iterations "
         "(reports throughtput and average call time)",
         action="store_true",
         default=False,
@@ -73,7 +75,6 @@ def parse_options(args: typing.List[str]) -> Options:
         default=False,
         dest="verbose",
     )
-
     parser.add_argument("app", help="an application module or file")
     parser.add_argument(
         "url",
@@ -84,5 +85,30 @@ def parse_options(args: typing.List[str]) -> Options:
     options = parser.parse_args(args)
     options.number = parse_number(options.number)
     if options.data is not None:
+        if options.command is None:
+            options.command = "POST"
+        if not has_content_type(options.header):
+            content_type = guess_content_type(options.data)
+            if content_type:
+                options.header.append(f"content-type: {content_type}")
         options.data = options.data.encode("utf-8")
     return typing.cast(Options, options)
+
+
+def guess_content_type(data: str) -> str:
+    try:
+        json.loads(data)
+        return "application/json"
+    except ValueError:
+        # Value Error is never raised below since there is no strict parsing
+        # or a limit for max field number
+        parse_qsl(data)
+        return "application/x-www-form-urlencoded"
+
+
+def has_content_type(headers: typing.List[str]) -> bool:
+    for line in headers:
+        name, _ = line.split(": ", 1)
+        if name.lower() == "content-type":
+            return True
+    return False
