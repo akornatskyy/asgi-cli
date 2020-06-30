@@ -62,6 +62,15 @@ def parse_options(args: typing.List[str]) -> Options:
         dest="benchmark",
     )
     parser.add_argument(
+        "-p",
+        "--profile",
+        help="prints out a report of top 10 functions ordered by "
+        "internal time, saves to 'stats.cprof' file",
+        action="store_true",
+        default=False,
+        dest="profile",
+    )
+    parser.add_argument(
         "-n",
         help="a number of requests to issue (default 100K)",
         default="100K",
@@ -75,7 +84,7 @@ def parse_options(args: typing.List[str]) -> Options:
         default=False,
         dest="verbose",
     )
-    parser.add_argument("app", help="an application module or file")
+    parser.add_argument("app", help="an application module")
     parser.add_argument(
         "url",
         nargs="?",

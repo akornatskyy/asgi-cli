@@ -19,6 +19,10 @@ async def go(args: typing.List[str]) -> None:
         await formatter.print_timing(
             options.number, executor.benchmark(options.number)
         )
+    elif options.profile:
+        stats = await executor.stats(options.number)
+        formatter.print_stats(stats)
+        stats.dump_stats("stats.cprof")
     elif options.headers_only:
         res = await executor.capture_call()
         formatter.print_headers(res)

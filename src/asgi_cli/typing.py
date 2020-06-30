@@ -14,6 +14,7 @@ class Options:
     header: typing.List[str]
     data: bytes
     benchmark: bool
+    profile: bool
     number: int
     verbose: bool
     app: str

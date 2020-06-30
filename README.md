@@ -22,28 +22,29 @@ asgi-cli --help
 ```
 
 ```text
-usage: asgi-cli [-h] [--version] [-X COMMAND] [-I] [-H HEADER] [-d DATA] [-b]
+usage: asgi-cli [-h] [-V] [-X COMMAND] [-H HEADER] [-d DATA] [-I] [-b] [-p]
                 [-n NUMBER] [-v]
                 app [url]
 
 positional arguments:
-  app                   an application module or file
+  app                   an application module
   url                   a uniform resource locator or path (default /)
 
 optional arguments:
   -h, --help            show this help message and exit
-  --version             show program's version number and exit
+  -V, --version         show program's version number and exit
   -X COMMAND, --request COMMAND
                         specify request command to use, e.g. POST (default
                         GET)
-  -I, --head            show status and headers only
   -H HEADER, --header HEADER
                         pass custom header line, e.g. -H='Accept:
                         application/json'
   -d DATA               request body data, e.g. '{"msg":"hello"}', 'msg=hello'
-  -b, --benchmark       issue a number of requests through repeated
-                        iterations (reports throughtput and average call
-                        time)
+  -I, --head            show status and headers only
+  -b, --benchmark       issue a number of requests through repeated iterations
+                        (reports throughtput and average call time)
+  -p, --profile         prints out a report of top 10 functions ordered by
+                        internal time, saves to 'stats.cprof' file
   -n NUMBER             a number of requests to issue (default 100K)
   -v, --verbose         make the operation more talkative
 ```

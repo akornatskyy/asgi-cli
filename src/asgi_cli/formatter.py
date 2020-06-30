@@ -1,4 +1,5 @@
 import typing
+from pstats import Stats
 
 from asgi_cli.executor import Response
 
@@ -39,3 +40,7 @@ def print_headers(res: Response) -> None:
 def print_body(res: Response) -> None:
     body = res.body
     print(body.decode("utf8"))
+
+
+def print_stats(stats: Stats) -> None:
+    stats.strip_dirs().sort_stats("time").print_stats(10)

@@ -1,5 +1,6 @@
 import pprint
 import typing
+from pstats import Stats
 
 from asgi_cli.timing import repeat
 from asgi_cli.typing import ASGICallable, Headers, Message, Scope
@@ -61,7 +62,7 @@ class Executor(object):
         app = self.app
         scope = self.scope
 
-        async def f() -> None:
+        async def asgi_app_caller() -> None:
             async def receive() -> Message:  # pragma: nocover
                 return {"type": "http.request", "body": self.data}
 
@@ -71,5 +72,29 @@ class Executor(object):
             # shallow copy should be just fine, right?
             await app(scope.copy(), receive, send)
 
-        async for time in repeat(f, number=number):
+        async for time in repeat(asgi_app_caller, number=number):
             yield time
+
+    async def stats(self, number: int) -> Stats:
+        import asyncio
+        import cProfile
+        import threading
+
+        st = Stats()
+
+        def worker() -> None:
+            def f() -> None:
+                async def x() -> None:
+                    async for r in self.benchmark(number):
+                        pass
+
+                loop = asyncio.new_event_loop()
+                loop.run_until_complete(x())
+                loop.close()
+
+            st.add(cProfile.Profile().runctx("f()", globals(), locals()))
+
+        t = threading.Thread(target=worker)
+        t.start()
+        t.join()
+        return st
