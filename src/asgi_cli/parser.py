@@ -22,22 +22,21 @@ def parse_number(s: str) -> int:
 
 def parse_options(args: typing.List[str]) -> Options:
     parser = argparse.ArgumentParser()
+    parser.add_argument("app", help="an application module")
     parser.add_argument(
-        "--version", action="version", version="%(prog)s " + __version__
+        "url",
+        nargs="?",
+        help="a uniform resource locator or path (default /)",
+        default="/",
+    )
+    parser.add_argument(
+        "-V", "--version", action="version", version="%(prog)s " + __version__
     )
     parser.add_argument(
         "-X",
         "--request",
         help="specify request command to use, e.g. POST (default GET)",
         dest="command",
-    )
-    parser.add_argument(
-        "-I",
-        "--head",
-        help="show status and headers only",
-        action="store_true",
-        default=False,
-        dest="headers_only",
     )
     parser.add_argument(
         "-H",
@@ -52,7 +51,16 @@ def parse_options(args: typing.List[str]) -> Options:
         help="request body data, e.g. '{\"msg\":\"hello\"}', 'msg=hello'",
         dest="data",
     )
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "-I",
+        "--head",
+        help="show status and headers only",
+        action="store_true",
+        default=False,
+        dest="headers_only",
+    )
+    group.add_argument(
         "-b",
         "--benchmark",
         help="issue a number of requests through repeated iterations "
@@ -61,7 +69,7 @@ def parse_options(args: typing.List[str]) -> Options:
         default=False,
         dest="benchmark",
     )
-    parser.add_argument(
+    group.add_argument(
         "-p",
         "--profile",
         help="prints out a report of top 10 functions ordered by "
@@ -76,20 +84,13 @@ def parse_options(args: typing.List[str]) -> Options:
         default="100K",
         dest="number",
     )
-    parser.add_argument(
+    group.add_argument(
         "-v",
         "--verbose",
         help="make the operation more talkative",
         action="store_true",
         default=False,
         dest="verbose",
-    )
-    parser.add_argument("app", help="an application module")
-    parser.add_argument(
-        "url",
-        nargs="?",
-        help="a uniform resource locator or path (default /)",
-        default="/",
     )
     options = parser.parse_args(args)
     options.number = parse_number(options.number)
