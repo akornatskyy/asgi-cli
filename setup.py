@@ -3,7 +3,7 @@ import re
 from setuptools import setup
 
 README = open("README.md").read()
-version = (
+VERSION = (
     re.search(
         r"__version__ = \"(.+)\"", open("src/asgi_cli/__init__.py").read()
     )
@@ -13,7 +13,7 @@ version = (
 
 setup(
     name="asgi-cli",
-    version=version,
+    version=VERSION,
     description="Call ASGI Python application from command line,"
     " just like CURL",
     long_description=README,
@@ -46,7 +46,6 @@ setup(
     package_dir={"": "src"},
     zip_safe=True,
     install_requires=[],
-    extras_require={"dev": ["pytest", "pytest-cov"]},
     entry_points={"console_scripts": ["asgi-cli=asgi_cli.main:main"]},
     platforms="any",
 )
