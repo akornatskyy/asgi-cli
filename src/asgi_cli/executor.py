@@ -20,16 +20,21 @@ class Response(object):
 
 
 class Executor(object):
-    def __init__(self, app: ASGICallable, scope: Scope, data: bytes) -> None:
+    def __init__(
+        self,
+        app: ASGICallable,
+        scope: Scope,
+        chunks: typing.AsyncIterator[Message],
+    ) -> None:
         self.app = app
         self.scope = scope
-        self.data = data
+        self.chunks = chunks
 
     def verbose_call(self) -> typing.Awaitable[None]:
         pp.pprint({"scope": self.scope})
 
         async def receive() -> Message:  # pragma: nocover
-            m = {"type": "http.request", "body": self.data}
+            m = await self.chunks.__anext__()
             pp.pprint({"message": m})
             return m
 
@@ -42,7 +47,7 @@ class Executor(object):
         res = Response()
 
         async def receive() -> Message:  # pragma: nocover
-            return {"type": "http.request", "body": self.data}
+            return await self.chunks.__anext__()
 
         async def send(message: Message) -> None:
             if message["type"] == "http.response.start":
@@ -61,10 +66,11 @@ class Executor(object):
     async def benchmark(self, number: int) -> typing.AsyncIterator[float]:
         app = self.app
         scope = self.scope
+        m = await self.chunks.__anext__()
 
         async def asgi_app_caller() -> None:
             async def receive() -> Message:  # pragma: nocover
-                return {"type": "http.request", "body": self.data}
+                return m
 
             async def send(message: Message) -> None:
                 pass
@@ -85,8 +91,8 @@ class Executor(object):
         def worker() -> None:
             def f() -> None:
                 async def x() -> None:
-                    async for r in self.benchmark(number):
-                        pass
+                    async for _ in self.benchmark(number):
+                        pass  # pragma: nocover
 
                 loop = asyncio.new_event_loop()
                 loop.run_until_complete(x())

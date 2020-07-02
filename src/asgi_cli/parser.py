@@ -1,8 +1,9 @@
 import argparse
 import json
+import random
 import re
+import string
 import typing
-from urllib.parse import parse_qsl
 
 from asgi_cli import __version__
 from asgi_cli.typing import Options
@@ -46,10 +47,22 @@ def parse_options(args: typing.List[str]) -> Options:
         dest="header",
         default=[],
     )
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
         "-d",
+        "--data",
         help="request body data, e.g. '{\"msg\":\"hello\"}', 'msg=hello'",
         dest="data",
+        action="append",
+        default=[],
+    )
+    group.add_argument(
+        "-F",
+        "--form",
+        help="specify HTTP multipart POST data, e.g. name=value or name=@file",
+        dest="multipart",
+        action="append",
+        default=[],
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -92,16 +105,33 @@ def parse_options(args: typing.List[str]) -> Options:
         default=False,
         dest="verbose",
     )
+
     options = parser.parse_args(args)
     options.number = parse_number(options.number)
-    if options.data is not None:
+    if options.benchmark and options.multipart:  # pragma: nocover
+        parser.error(
+            "argument -b/--benchmark: not allowed with argument -F/--form"
+        )
+        return
+    if options.data:
         if options.command is None:
             options.command = "POST"
+        data = "&".join(options.data)
         if not has_content_type(options.header):
-            content_type = guess_content_type(options.data)
-            if content_type:
-                options.header.append(f"content-type: {content_type}")
-        options.data = options.data.encode("utf-8")
+            content_type = guess_content_type(data)
+            options.header.append(f"content-type: {content_type}")
+        options.data = data.encode("utf-8")
+    elif options.multipart:
+        options.command = "POST"
+        boundary = "----" + "".join(
+            random.choice(string.ascii_letters) for _ in range(12)
+        )
+        options.boundary = boundary.encode("latin-1")
+        options.header.append(
+            f"content-type: multipart/form-data; boundary={boundary}"
+        )
+    else:
+        options.data = b""
     return typing.cast(Options, options)
 
 
@@ -110,9 +140,6 @@ def guess_content_type(data: str) -> str:
         json.loads(data)
         return "application/json"
     except ValueError:
-        # Value Error is never raised below since there is no strict parsing
-        # or a limit for max field number
-        parse_qsl(data)
         return "application/x-www-form-urlencoded"
 
 

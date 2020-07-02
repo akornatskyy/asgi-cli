@@ -1,8 +1,10 @@
 import copy
+import typing
+from mimetypes import guess_type
 from urllib.parse import unquote, urljoin, urlsplit
 
 from asgi_cli import __version__
-from asgi_cli.typing import Options, Scope
+from asgi_cli.typing import Message, Options, Scope
 
 default_port = {"http": 80, "https": 443}
 base_url: str = "http://127.0.0.1:8000"
@@ -46,3 +48,65 @@ def build_scope(options: Options) -> Scope:
     scope["path"] = unquote(path)
     scope["query_string"] = query.encode()
     return scope
+
+
+async def gen_chunks(options: Options) -> typing.AsyncIterator[Message]:
+    if not options.multipart:
+        yield {"type": "http.request", "body": options.data}
+        return
+    boundary = b"--" + options.boundary
+    for multipart in options.multipart:
+        name, value = multipart.split("=", 1)
+        if value.startswith("@"):
+            fn = value[1:]
+            mime_type, _ = guess_type(fn)
+            if not mime_type:
+                mime_type = "application/octet-stream"
+            yield {
+                "type": "http.request",
+                "more_body": True,
+                "body": b"".join(
+                    (
+                        boundary,
+                        b"\r\n" b'Content-Disposition: form-data; name="',
+                        name.encode("utf-8"),
+                        b'"; filename="',
+                        fn.encode("utf-8"),
+                        b'"\r\n' b"Content-Type: ",
+                        mime_type.encode("latin-1"),
+                        b"\r\n\r\n",
+                    )
+                ),
+            }
+            f = open(fn, mode="rb")
+            while True:
+                data = f.read(1024)
+                if not data:
+                    break
+                yield {
+                    "type": "http.request",
+                    "more_body": True,
+                    "body": data,
+                }
+            f.close()
+            yield {
+                "type": "http.request",
+                "more_body": True,
+                "body": b"\r\n",
+            }
+        else:
+            yield {
+                "type": "http.request",
+                "more_body": True,
+                "body": b"".join(
+                    (
+                        boundary,
+                        b'\r\nContent-Disposition: form-data; name="',
+                        name.encode("utf-8"),
+                        b'"\r\n\r\n',
+                        value.encode("utf-8"),
+                        b"\r\n",
+                    )
+                ),
+            }
+    yield {"type": "http.request", "body": boundary + b"--"}

@@ -13,6 +13,8 @@ class Options:
     headers_only: bool
     header: typing.List[str]
     data: bytes
+    multipart: typing.List[str]
+    boundary: bytes
     benchmark: bool
     profile: bool
     number: int

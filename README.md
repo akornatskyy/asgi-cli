@@ -12,7 +12,7 @@ If you’re using this tool, **★Star** this repository to show your interest, 
 ## Install
 
 ```sh
-pip install asgi-cli
+pip install -U asgi-cli
 ```
 
 ## Usage
@@ -22,8 +22,8 @@ asgi-cli --help
 ```
 
 ```text
-usage: asgi-cli [-h] [-V] [-X COMMAND] [-H HEADER] [-d DATA] [-I] [-b] [-p]
-                [-n NUMBER] [-v]
+usage: asgi-cli [-h] [-V] [-X COMMAND] [-H HEADER] [-d DATA | -F MULTIPART]
+                [-I] [-b] [-p] [-n NUMBER] [-v]
                 app [url]
 
 positional arguments:
@@ -39,7 +39,10 @@ optional arguments:
   -H HEADER, --header HEADER
                         pass custom header line, e.g. -H='Accept:
                         application/json'
-  -d DATA               request body data, e.g. '{"msg":"hello"}', 'msg=hello'
+  -d DATA, --data DATA  request body data, e.g. '{"msg":"hello"}', 'msg=hello'
+  -F MULTIPART, --form MULTIPART
+                        specify HTTP multipart POST data, e.g. name=value or
+                        name=@file
   -I, --head            show status and headers only
   -b, --benchmark       issue a number of requests through repeated iterations
                         (reports throughtput and average call time)
