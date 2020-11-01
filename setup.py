@@ -14,6 +14,7 @@ VERSION = (
 setup(
     name="asgi-cli",
     version=VERSION,
+    python_requires=">=3.6",
     description="Call ASGI Python application from command line,"
     " just like CURL",
     long_description=README,
@@ -23,7 +24,8 @@ setup(
     author_email="andriy.kornatskyy@live.com",
     license="MIT",
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Console",
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
@@ -33,6 +35,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Internet :: WWW/HTTP",

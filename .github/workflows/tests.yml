@@ -16,6 +16,8 @@ jobs:
             tox: py37
           - python: "3.8"
             tox: py38
+          - python: "3.9"
+            tox: py39
     steps:
       - name: Checkout code
         uses: "actions/checkout@v2"

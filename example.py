@@ -30,7 +30,11 @@ async def receiver(scope, receive, send) -> None:
 
 async def handle_404(scope, receive, send):
     await send(
-        {"type": "http.response.start", "status": 404, "headers": [],}
+        {
+            "type": "http.response.start",
+            "status": 404,
+            "headers": [],
+        }
     )
     await send({"type": "http.response.body"})
 
