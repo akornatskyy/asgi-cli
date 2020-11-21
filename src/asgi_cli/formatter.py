@@ -17,7 +17,7 @@ def format_number(n: float) -> str:
         n = n * 1000.0
         return f"{n:,.2f}m"
     n = n * 1000000.0
-    return f"{n:,.2f}μ"
+    return f"{n:,.2f}u"
 
 
 async def print_timing(
