@@ -2,6 +2,7 @@ import asyncio
 import os
 import sys
 import typing
+import traceback
 
 from asgi_cli import builder, formatter, loader, parser
 from asgi_cli.executor import Executor
@@ -33,8 +34,7 @@ async def go(args: typing.List[str]) -> int:
         return 0
     except Exception as err:
         errno: int = getattr(err, "errno", 1)
-        msg: str = getattr(err, "message", str(err))
-        sys.stderr.write(f"ERR: {msg}\n")
+        traceback.print_exc(file=sys.stderr)
         return errno
 
 
