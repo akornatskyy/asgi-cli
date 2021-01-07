@@ -1,8 +1,8 @@
 import asyncio
 import os
 import sys
-import typing
 import traceback
+import typing
 
 from asgi_cli import builder, formatter, loader, parser
 from asgi_cli.executor import Executor
