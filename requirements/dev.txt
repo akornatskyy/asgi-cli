@@ -12,13 +12,15 @@ click==7.1.2
     # via pip-tools
 colorama==0.4.4
     # via pytest
-coverage==5.4
+coverage==5.5
     # via pytest-cov
 iniconfig==1.1.1
     # via pytest
 packaging==20.9
     # via pytest
-pip-tools==5.5.0
+pep517==0.10.0
+    # via pip-tools
+pip-tools==6.1.0
     # via -r requirements/dev.in
 pluggy==0.13.1
     # via pytest
@@ -28,12 +30,14 @@ pyparsing==2.4.7
     # via packaging
 pytest-cov==2.11.1
     # via -r requirements/dev.in
-pytest==6.2.2
+pytest==6.2.3
     # via
     #   -r requirements/dev.in
     #   pytest-cov
 toml==0.10.2
-    # via pytest
+    # via
+    #   pep517
+    #   pytest
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
