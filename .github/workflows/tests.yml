@@ -18,6 +18,8 @@ jobs:
             tox: py38
           - python: "3.9"
             tox: py39
+          - python: "3.10"
+            tox: py310
           - python: "pypy3"
             tox: pypy3
     steps:
