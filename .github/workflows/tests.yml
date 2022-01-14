@@ -36,6 +36,7 @@ jobs:
       - name: Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        if: ${{ env.COVERALLS_REPO_TOKEN }}
         run: coveralls
   qa:
     runs-on: "ubuntu-latest"
