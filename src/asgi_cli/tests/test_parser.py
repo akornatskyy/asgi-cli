@@ -21,4 +21,4 @@ class ParserTestCase(unittest.TestCase):
             "K",
             "M",
         ]:
-            self.assertRaises(ValueError, lambda: parse_number(s))
+            self.assertRaises(ValueError, lambda s: parse_number(s), s)
