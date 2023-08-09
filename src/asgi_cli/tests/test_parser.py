@@ -5,7 +5,7 @@ from asgi_cli.parser import parse_number
 
 class ParserTestCase(unittest.TestCase):
     def test_parse_number(self) -> None:
-        for (s, expected) in [
+        for s, expected in [
             ("12345", 12345),
             ("12345678901", 12345678901),
             ("1K", 1e3),

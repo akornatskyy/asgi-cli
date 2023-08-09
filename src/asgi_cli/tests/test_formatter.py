@@ -5,7 +5,7 @@ from asgi_cli.formatter import format_number
 
 class FormatterTestCase(unittest.TestCase):
     def test_format_number(self) -> None:
-        for (number, expected) in [
+        for number, expected in [
             (12345678901, "12,345.68M"),
             (1234567890, "1,234.57M"),
             (123456789.1, "123.46M"),
