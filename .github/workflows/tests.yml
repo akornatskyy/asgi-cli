@@ -10,8 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - python: "3.7"
-            tox: py37
           - python: "3.8"
             tox: py38
           - python: "3.9"
@@ -20,7 +18,7 @@ jobs:
             tox: py310
           - python: "3.11"
             tox: py311
-          - python: "pypy-3.7"
+          - python: "pypy-3.10"
             tox: pypy3
     steps:
       - uses: actions/checkout@v3
