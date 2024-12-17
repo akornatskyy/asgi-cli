@@ -14,7 +14,7 @@ VERSION = (
 setup(
     name="asgi-cli",
     version=VERSION,
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     description="Call ASGI Python application from command line,"
     " just like CURL",
     long_description=README,
@@ -32,11 +32,11 @@ setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Internet :: WWW/HTTP",
