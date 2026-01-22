@@ -8,11 +8,6 @@ build==1.2.2.post1
     # via pip-tools
 click==8.1.8
     # via pip-tools
-colorama==0.4.6
-    # via
-    #   build
-    #   click
-    #   pytest
 coverage==7.8.0
     # via pytest-cov
 iniconfig==2.1.0
@@ -21,8 +16,9 @@ packaging==25.0
     # via
     #   build
     #   pytest
+    #   wheel
 pip-tools==7.4.1
-    # via -r requirements/dev.in
+    # via -r dev.in
 pluggy==1.5.0
     # via pytest
 pyproject-hooks==1.2.0
@@ -31,11 +27,11 @@ pyproject-hooks==1.2.0
     #   pip-tools
 pytest==8.3.5
     # via
-    #   -r requirements/dev.in
+    #   -r dev.in
     #   pytest-cov
 pytest-cov==6.1.1
-    # via -r requirements/dev.in
-wheel==0.45.1
+    # via -r dev.in
+wheel==0.46.2
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
