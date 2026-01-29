@@ -42,7 +42,7 @@ def main(args: typing.Optional[typing.List[str]] = None) -> int:
     if args is None:  # pragma: nocover
         args = sys.argv[1:]
     sys.path.extend([os.path.abspath(".")])
-    return asyncio.get_event_loop().run_until_complete(go(args))
+    return asyncio.run(go(args))
 
 
 if __name__ == "__main__":  # pragma: nocover
