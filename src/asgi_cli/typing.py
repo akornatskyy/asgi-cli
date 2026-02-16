@@ -9,12 +9,14 @@ Headers = typing.List[typing.Tuple[bytes, bytes]]
 
 
 class Options:
-    command: str
+    method: str
+    app_dir: str
     headers_only: bool
     header: typing.List[str]
     data: bytes
     multipart: typing.List[str]
     boundary: bytes
+    root_path: str
     benchmark: bool
     profile: bool
     number: int

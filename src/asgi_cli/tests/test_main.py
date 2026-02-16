@@ -16,6 +16,8 @@ class MainTestCase(unittest.TestCase):
         main(["-X", "POST", "-v", "example:app"])
         main(["-X", "POST", "-d", "msg=hello", "example:app"])
         main(["-I", "example:app"])
+        main(["--app-dir", ".", "app:main"])
+        main(["--app-dir", "./requirements", "app:main"])
         main(["-b", "-n", "1K", "example:app"])
         main(["-p", "-n", "1K", "example:app"])
         main(["-H", "Accept: application/json", "example:app"])

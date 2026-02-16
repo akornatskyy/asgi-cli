@@ -53,3 +53,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 asgi_cli = ["py.typed"]
+
+[tool.coverage.run]
+source = ["src/asgi_cli"]
+omit = ["*/test_*.py", "*/tests/*"]

@@ -12,6 +12,8 @@ from asgi_cli.typing import Options
 async def go(args: typing.List[str]) -> int:
     try:
         options: Options = parser.parse_options(args)
+        if loader.should_add_to_syspath(options.app_dir):
+            sys.path.append(options.app_dir)
         app = loader.from_string(options.app)
         scope = builder.build_scope(options)
         executor = Executor(app, scope, builder.gen_chunks(options))

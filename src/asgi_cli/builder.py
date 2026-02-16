@@ -13,7 +13,6 @@ default_scope: Scope = {
     "asgi": {"version": "3.0", "spec_version": "2.1"},
     "http_version": "1.1",
     "client": ("127.0.0.1", 49327),
-    "root_path": "",
     "headers": [
         (b"accept", b"*/*"),
         (b"user-agent", b"asgi-cli/" + __version__.encode("latin-1")),
@@ -24,10 +23,10 @@ default_scope: Scope = {
 def build_scope(options: Options) -> Scope:
     scope: Scope = copy.deepcopy(default_scope)
     if options.headers_only:
-        if not options.command:
-            options.command = "HEAD"
+        if not options.method:
+            options.method = "HEAD"
 
-    scope["method"] = (options.command or "GET").upper()
+    scope["method"] = (options.method or "GET").upper()
 
     for line in options.header:
         name, value = line.encode("latin-1").split(b": ", 1)
@@ -44,6 +43,7 @@ def build_scope(options: Options) -> Scope:
         port = default_port[scheme]
     scope["server"] = (host, port)
     scope["headers"].append((b"host", netloc.encode("latin-1")))
+    scope["root_path"] = options.root_path
     scope["raw_path"] = urljoin(path, query).encode()
     scope["path"] = unquote(path)
     scope["query_string"] = query.encode()

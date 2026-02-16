@@ -22,7 +22,7 @@ def parse_number(s: str) -> int:
 
 
 def parse_options(args: typing.List[str]) -> Options:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(prog="asgi-cli")
     parser.add_argument("app", help="an application module")
     parser.add_argument(
         "url",
@@ -34,10 +34,17 @@ def parse_options(args: typing.List[str]) -> Options:
         "-V", "--version", action="version", version="%(prog)s " + __version__
     )
     parser.add_argument(
+        "--app-dir",
+        help="look for APP in the specified directory, by "
+        "adding this to the PYTHONPATH",
+        default="",
+        dest="app_dir",
+    )
+    parser.add_argument(
         "-X",
         "--request",
-        help="specify request command to use, e.g. POST (default GET)",
-        dest="command",
+        help="specify request method to use, e.g. POST (default GET)",
+        dest="method",
     )
     parser.add_argument(
         "-H",
@@ -72,6 +79,12 @@ def parse_options(args: typing.List[str]) -> Options:
         action="store_true",
         default=False,
         dest="headers_only",
+    )
+    parser.add_argument(
+        "--root-path",
+        help="set the ASGI 'root_path'",
+        default="",
+        dest="root_path",
     )
     group.add_argument(
         "-b",
@@ -114,15 +127,15 @@ def parse_options(args: typing.List[str]) -> Options:
         )
         return
     if options.data:
-        if options.command is None:
-            options.command = "POST"
+        if options.method is None:
+            options.method = "POST"
         data = "&".join(options.data)
         if not has_content_type(options.header):
             content_type = guess_content_type(data)
             options.header.append(f"content-type: {content_type}")
         options.data = data.encode("utf-8")
     elif options.multipart:
-        options.command = "POST"
+        options.method = "POST"
         boundary = "----" + "".join(
             random.choice(string.ascii_letters) for _ in range(12)
         )

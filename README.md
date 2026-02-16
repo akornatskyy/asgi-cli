@@ -22,32 +22,30 @@ asgi-cli --help
 ```
 
 ```text
-usage: asgi-cli [-h] [-V] [-X COMMAND] [-H HEADER] [-d DATA | -F MULTIPART]
-                [-I] [-b] [-p] [-n NUMBER] [-v]
+usage: asgi_cli [-h] [-V] [--app-dir APP_DIR] [-X METHOD] [-H HEADER]
+                [-d DATA | -F MULTIPART] [-I | -b | -p | -v]
+                [--root-path ROOT_PATH] [-n NUMBER]
                 app [url]
 
 positional arguments:
   app                   an application module
   url                   a uniform resource locator or path (default /)
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -V, --version         show program's version number and exit
-  -X COMMAND, --request COMMAND
-                        specify request command to use, e.g. POST (default
-                        GET)
-  -H HEADER, --header HEADER
-                        pass custom header line, e.g. -H='Accept:
-                        application/json'
-  -d DATA, --data DATA  request body data, e.g. '{"msg":"hello"}', 'msg=hello'
-  -F MULTIPART, --form MULTIPART
-                        specify HTTP multipart POST data, e.g. name=value or
-                        name=@file
+  --app-dir APP_DIR     look for APP in the specified directory, by adding this to the PYTHONPATH
+  -X, --request METHOD  specify request method to use, e.g. POST (default GET)
+  -H, --header HEADER   pass custom header line, e.g. -H='Accept: application/json'
+  -d, --data DATA       request body data, e.g. '{"msg":"hello"}', 'msg=hello'
+  -F, --form MULTIPART  specify HTTP multipart POST data, e.g. name=value or name=@file
   -I, --head            show status and headers only
-  -b, --benchmark       issue a number of requests through repeated iterations
-                        (reports throughtput and average call time)
-  -p, --profile         prints out a report of top 10 functions ordered by
-                        internal time, saves to 'stats.cprof' file
+  --root-path ROOT_PATH
+                        set the ASGI 'root_path'
+  -b, --benchmark       issue a number of requests through repeated iterations (reports
+                        throughtput and average call time)
+  -p, --profile         prints out a report of top 10 functions ordered by internal time, saves to
+                        'stats.cprof' file
   -n NUMBER             a number of requests to issue (default 100K)
   -v, --verbose         make the operation more talkative
 ```
