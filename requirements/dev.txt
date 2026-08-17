@@ -8,13 +8,10 @@ build==1.5.0
     # via pip-tools
 click==8.4.2
     # via pip-tools
-colorama==0.4.6
-    # via
-    #   build
-    #   click
-    #   pytest
 coverage==7.14.3
     # via pytest-cov
+exceptiongroup==1.3.1
+    # via pytest
 iniconfig==2.3.0
     # via pytest
 packaging==26.2
@@ -22,7 +19,7 @@ packaging==26.2
     #   build
     #   pytest
     #   wheel
-pip-tools==7.5.3
+pip-tools==7.6.1
     # via -r requirements/dev.in
 pluggy==1.6.0
     # via
@@ -40,6 +37,16 @@ pytest==9.1.1
     #   pytest-cov
 pytest-cov==7.1.0
     # via -r requirements/dev.in
+tomli==2.4.1
+    # via
+    #   build
+    #   coverage
+    #   pip-tools
+    #   pytest
+typing-extensions==4.16.0
+    # via
+    #   exceptiongroup
+    #   pip-tools
 wheel==0.47.0
     # via pip-tools
 
