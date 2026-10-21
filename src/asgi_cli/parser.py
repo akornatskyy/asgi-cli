@@ -21,7 +21,7 @@ def parse_number(s: str) -> int:
     return n
 
 
-def parse_options(args: typing.List[str]) -> Options:
+def parse_options(args: list[str]) -> Options:
     parser = argparse.ArgumentParser(prog="asgi-cli")
     parser.add_argument("app", help="an application module")
     parser.add_argument(
@@ -156,7 +156,7 @@ def guess_content_type(data: str) -> str:
         return "application/x-www-form-urlencoded"
 
 
-def has_content_type(headers: typing.List[str]) -> bool:
+def has_content_type(headers: list[str]) -> bool:
     for line in headers:
         name, _ = line.split(": ", 1)
         if name.lower() == "content-type":

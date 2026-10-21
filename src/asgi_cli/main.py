@@ -2,14 +2,13 @@ import asyncio
 import os
 import sys
 import traceback
-import typing
 
 from asgi_cli import builder, formatter, loader, parser
 from asgi_cli.executor import Executor
 from asgi_cli.typing import Options
 
 
-async def go(args: typing.List[str]) -> int:
+async def go(args: list[str]) -> int:
     try:
         options: Options = parser.parse_options(args)
         if loader.should_add_to_syspath(options.app_dir):
@@ -34,13 +33,13 @@ async def go(args: typing.List[str]) -> int:
             res = await executor.capture_call()
             formatter.print_body(res)
         return 0
-    except Exception as err:
+    except Exception as err:  # noqa: BLE001
         errno: int = getattr(err, "errno", 1)
         traceback.print_exc(file=sys.stderr)
         return errno
 
 
-def main(args: typing.Optional[typing.List[str]] = None) -> int:
+def main(args: list[str] | None = None) -> int:
     if args is None:  # pragma: nocover
         args = sys.argv[1:]
     sys.path.extend([os.path.abspath(".")])

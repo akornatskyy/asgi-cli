@@ -22,9 +22,8 @@ default_scope: Scope = {
 
 def build_scope(options: Options) -> Scope:
     scope: Scope = copy.deepcopy(default_scope)
-    if options.headers_only:
-        if not options.method:
-            options.method = "HEAD"
+    if options.headers_only and not options.method:
+        options.method = "HEAD"
 
     scope["method"] = (options.method or "GET").upper()
 
@@ -68,27 +67,23 @@ async def gen_chunks(options: Options) -> typing.AsyncIterator[Message]:
                 "body": b"".join(
                     (
                         boundary,
-                        b"\r\n" b'Content-Disposition: form-data; name="',
+                        b'\r\nContent-Disposition: form-data; name="',
                         name.encode("utf-8"),
                         b'"; filename="',
                         fn.encode("utf-8"),
-                        b'"\r\n' b"Content-Type: ",
+                        b'"\r\nContent-Type: ',
                         mime_type.encode("latin-1"),
                         b"\r\n\r\n",
                     )
                 ),
             }
-            f = open(fn, mode="rb")
-            while True:
-                data = f.read(1024)
-                if not data:
-                    break
-                yield {
-                    "type": "http.request",
-                    "more_body": True,
-                    "body": data,
-                }
-            f.close()
+            with open(fn, "rb") as f:  # noqa: ASYNC230
+                while data := f.read(1024):
+                    yield {
+                        "type": "http.request",
+                        "more_body": True,
+                        "body": data,
+                    }
             yield {
                 "type": "http.request",
                 "more_body": True,

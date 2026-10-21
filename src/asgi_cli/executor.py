@@ -8,18 +8,18 @@ from asgi_cli.typing import ASGICallable, Headers, Message, Scope
 pp = pprint.PrettyPrinter()
 
 
-class Response(object):
+class Response:
     def __init__(self) -> None:
         self.status_code: int = 0
         self.headers: Headers = []
-        self.chunks: typing.List[bytes] = []
+        self.chunks: list[bytes] = []
 
     @property
     def body(self) -> bytes:
         return b"".join(self.chunks)
 
 
-class Executor(object):
+class Executor:
     def __init__(
         self,
         app: ASGICallable,
@@ -55,7 +55,7 @@ class Executor(object):
                 res.headers = message["headers"]
             elif message["type"] == "http.response.body":
                 # TODO: more_body
-                chunk: typing.Optional[bytes] = message.get("body")
+                chunk: bytes | None = message.get("body")
                 if chunk is not None:
                     res.chunks.append(chunk)
 
